@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { Bot, Link } from 'lucide-vue-next'
+import { Bot, LayoutDashboard, Link } from 'lucide-vue-next'
 
 export class ScraperMenuBuilder extends MenuBuilder {
   build(menu: MenuItemConfig, menuName: string): MenuItemConfig {
@@ -11,6 +11,14 @@ export class ScraperMenuBuilder extends MenuBuilder {
         order: 95,
         permission: 'scraper',
         children: [
+          {
+            id: 'scraper-dashboard',
+            title: 'Dashboard',
+            path: '/admin/scraper/dashboard',
+            icon: LayoutDashboard,
+            order: 5,
+            permission: 'scraper'
+          },
           {
             id: 'scraper-list',
             title: 'Scraperek',

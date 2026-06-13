@@ -2,6 +2,8 @@ import { createApiClient } from '@user/services/apiClient'
 
 const api = createApiClient()
 
+export type ScraperStatus = 'active' | 'inactive' | 'blocked'
+
 export interface Scraper {
   id: number
   name: string
@@ -11,9 +13,21 @@ export interface Scraper {
   follow_links: boolean
   chunk_size: number
   blocked: string | null
+  is_blocked: boolean
+  status: ScraperStatus
   created_at: string
   updated_at: string
   scraper_urls_count?: number
+}
+
+export interface ScraperDashboardSummary {
+  total_scrapers: number
+  active_scrapers: number
+  inactive_scrapers: number
+  blocked_scrapers: number
+  total_urls: number
+  worker_enabled: boolean
+  worker_limit: number
 }
 
 export interface ScraperFormData {
@@ -44,9 +58,18 @@ export interface SingleResponse<T> {
   data: T
 }
 
+export interface ScraperDashboardResponse {
+  summary: ScraperDashboardSummary
+  data: Scraper[]
+}
+
 export const scraperService = {
   getAll(params?: { search?: string; sort?: string; direction?: string; page?: number; per_page?: number }) {
     return api.get<PaginatedResponse<Scraper>>('/api/admin/scraper/scrapers', { params })
+  },
+
+  getDashboard() {
+    return api.get<ScraperDashboardResponse>('/api/admin/scraper/scrapers/dashboard')
   },
 
   getCreateData() {

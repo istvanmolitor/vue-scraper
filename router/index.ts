@@ -2,6 +2,12 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const scraperRoutes: RouteRecordRaw[] = [
   {
+    path: '/admin/scraper/dashboard',
+    name: 'scraper-dashboard',
+    component: () => import('../views/scraper/ScraperDashboard.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/scraper',
     name: 'scrapers',
     component: () => import('../views/scraper/ScraperIndex.vue'),
