@@ -2,6 +2,7 @@
 import { AdminLayout, toastService, CreateButton, EditButton, DeleteButton, IconButton } from '@admin'
 import DataTable, { type Column, type PaginationMeta } from '@admin/components/ui/dataTable/DataTable.vue'
 import Label from '@admin/components/ui/Label.vue'
+import ShowButton from '@admin/components/ui/button/ShowButton.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperService, type Scraper } from '../../services/scraperService'
@@ -85,6 +86,10 @@ const deleteScraperUrl = async (id: number) => {
 
 const editScraperUrl = (id: number) => {
   router.push(`/admin/scraper-url/${id}/edit`)
+}
+
+const showScraperUrl = (id: number) => {
+  router.push(`/admin/scraper-url/${id}`)
 }
 
 const downloadScraperUrl = async (id: number) => {
@@ -198,6 +203,7 @@ onMounted(async () => {
       </template>
 
       <template #row-actions="{ row }">
+        <ShowButton @click="showScraperUrl(row.id)" />
         <IconButton
           icon="Download"
           title="Letöltés"

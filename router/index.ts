@@ -38,6 +38,12 @@ const scraperRoutes: RouteRecordRaw[] = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/scraper-url/:id',
+    name: 'scraper-url-show',
+    component: () => import('../views/scraper-url/ScraperUrlShow.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/scraper-url/:id/edit',
     name: 'scraper-url-edit',
     component: () => import('../views/scraper-url/ScraperUrlEdit.vue'),
