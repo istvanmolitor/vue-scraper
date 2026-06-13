@@ -18,6 +18,7 @@ export interface Scraper {
   created_at: string
   updated_at: string
   scraper_urls_count?: number
+  downloaded_urls_count?: number
 }
 
 export interface ScraperDashboardSummary {

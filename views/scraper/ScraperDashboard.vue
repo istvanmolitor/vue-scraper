@@ -20,6 +20,20 @@ const summary = ref<ScraperDashboardSummary>({
 const blockedScrapers = computed(() => scrapers.value.filter((scraper) => scraper.status === 'blocked'))
 const inactiveScrapers = computed(() => scrapers.value.filter((scraper) => scraper.status === 'inactive'))
 
+const getTotalUrls = (scraper: Scraper): number => scraper.scraper_urls_count ?? 0
+
+const getDownloadedUrls = (scraper: Scraper): number => scraper.downloaded_urls_count ?? 0
+
+const getDownloadProgress = (scraper: Scraper): number => {
+  const total = getTotalUrls(scraper)
+
+  if (total === 0) {
+    return 0
+  }
+
+  return Math.min(100, Math.round((getDownloadedUrls(scraper) / total) * 100))
+}
+
 const fetchDashboard = async () => {
   try {
     isLoading.value = true
@@ -150,6 +164,19 @@ onMounted(() => {
                     <span>Csomagméret: {{ scraper.chunk_size }}</span>
                     <span>Robots.txt: {{ scraper.robots_txt ? 'igen' : 'nem' }}</span>
                     <span>Követ linkeket: {{ scraper.follow_links ? 'igen' : 'nem' }}</span>
+                  </div>
+
+                  <div class="space-y-1">
+                    <div class="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>Letöltött linkek</span>
+                      <span>{{ getDownloadedUrls(scraper) }} / {{ getTotalUrls(scraper) }} ({{ getDownloadProgress(scraper) }}%)</span>
+                    </div>
+                    <div class="h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                      <div
+                        class="h-full rounded-full bg-emerald-500 transition-all duration-300"
+                        :style="{ width: `${getDownloadProgress(scraper)}%` }"
+                      />
+                    </div>
                   </div>
 
                   <p v-if="scraper.is_blocked" class="text-sm text-orange-700 dark:text-orange-400">
