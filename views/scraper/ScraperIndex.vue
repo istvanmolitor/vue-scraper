@@ -16,7 +16,6 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<Scraper>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
   { key: 'base_url', label: 'Alap URL', sortable: true },
   { key: 'enabled', label: 'Állapot', sortable: true, width: '120px' },
