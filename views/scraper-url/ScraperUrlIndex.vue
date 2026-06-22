@@ -23,6 +23,7 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<ScraperUrl>[] = [
+  { key: 'download', label: '', sortable: false, width: '56px' },
   { key: 'url', label: 'URL', sortable: false },
   { key: 'type', label: 'Típus', sortable: true, width: '120px' },
   { key: 'priority', label: 'Prioritás', sortable: true, width: '120px' },
@@ -201,14 +202,17 @@ onMounted(async () => {
         <span class="text-sm">{{ formatDate(row.expiration_at) }}</span>
       </template>
 
-      <template #row-actions="{ row }">
-        <ShowButton @click="showScraperUrl(row.id)" />
+      <template #cell-download="{ row }">
         <IconButton
           icon="Download"
           title="Letöltés"
           :disabled="downloadingId === row.id"
           @click="downloadScraperUrl(row.id)"
         />
+      </template>
+
+      <template #row-actions="{ row }">
+        <ShowButton @click="showScraperUrl(row.id)" />
         <EditButton @click="editScraperUrl(row.id)" />
         <DeleteButton @confirm="deleteScraperUrl(row.id)" />
       </template>
