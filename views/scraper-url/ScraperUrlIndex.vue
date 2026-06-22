@@ -23,7 +23,7 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<ScraperUrl>[] = [
-  { key: 'download', label: '', sortable: false, width: '56px' },
+  { key: 'download', label: '', sortable: false, width: '96px' },
   { key: 'url', label: 'URL', sortable: false },
   { key: 'type', label: 'Típus', sortable: true, width: '120px' },
   { key: 'priority', label: 'Prioritás', sortable: true, width: '120px' },
@@ -203,12 +203,35 @@ onMounted(async () => {
       </template>
 
       <template #cell-download="{ row }">
-        <IconButton
-          icon="Download"
-          title="Letöltés"
-          :disabled="downloadingId === row.id"
-          @click="downloadScraperUrl(row.id)"
-        />
+        <div class="flex items-center gap-1">
+          <IconButton
+            icon="Download"
+            title="Letöltés"
+            :disabled="downloadingId === row.id"
+            @click="downloadScraperUrl(row.id)"
+          />
+          <div class="relative group">
+            <IconButton icon="Info" />
+            <div
+              v-if="row.meta_data && Object.keys(row.meta_data).length"
+              class="pointer-events-none absolute left-8 top-0 z-50 hidden w-150 rounded border border-slate-200 bg-white p-3 shadow-lg group-hover:block"
+            >
+              <p class="mb-1 text-xs font-semibold text-slate-600">Letöltött adatok</p>
+              <dl class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1">
+                <div v-for="(value, key) in row.meta_data" :key="String(key)" class="contents text-sm">
+                  <dt class="whitespace-nowrap text-right font-bold text-slate-700">{{ key }}:</dt>
+                  <dd class="break-all text-slate-800">{{ value }}</dd>
+                </div>
+              </dl>
+            </div>
+            <div
+              v-else
+              class="pointer-events-none absolute left-8 top-0 z-50 hidden w-48 rounded border border-slate-200 bg-white p-3 shadow-lg group-hover:block"
+            >
+              <p class="text-xs text-slate-400">Nincs letöltött adat.</p>
+            </div>
+          </div>
+        </div>
       </template>
 
       <template #row-actions="{ row }">

@@ -21,8 +21,8 @@ const errors = ref<Record<string, string[]>>({})
 const form = reactive<ScraperFormData>({
   name: '',
   base_url: '',
-  enabled: true,
-  robots_txt: true,
+  enabled: false,
+  robots_txt: false,
   follow_links: false,
   chunk_size: 1000,
 })
