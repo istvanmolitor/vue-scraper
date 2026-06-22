@@ -23,9 +23,8 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<ScraperUrl>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
-  { key: 'type', label: 'Típus', sortable: true, width: '120px' },
   { key: 'url', label: 'URL', sortable: false },
+  { key: 'type', label: 'Típus', sortable: true, width: '120px' },
   { key: 'priority', label: 'Prioritás', sortable: true, width: '120px' },
   { key: 'ready', label: 'Állapot', sortable: true, width: '120px' },
   { key: 'expiration_at', label: 'Lejárat', sortable: true, width: '180px' },
@@ -193,7 +192,7 @@ onMounted(async () => {
       </template>
 
       <template #cell-url="{ row }">
-        <a :href="row.url" target="_blank" class="text-blue-600 hover:underline truncate block max-w-xl">
+        <a :href="row.url" target="_blank" class="text-blue-600 hover:underline break-all block max-w-sm">
           {{ row.url }}
         </a>
       </template>
