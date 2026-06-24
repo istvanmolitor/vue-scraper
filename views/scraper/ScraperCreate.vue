@@ -115,17 +115,17 @@ onMounted(() => {
 
         <div class="flex items-center space-x-2">
           <Checkbox id="enabled" v-model="form.enabled" />
-          <Label for="enabled" class="cursor-pointer">Engedélyezve</Label>
+          <Label for="enabled" variant="checkbox">Engedélyezve</Label>
         </div>
 
         <div class="flex items-center space-x-2">
           <Checkbox id="robots_txt" v-model="form.robots_txt" />
-          <Label for="robots_txt" class="cursor-pointer">Robots.txt figyelembevétele</Label>
+          <Label for="robots_txt" variant="checkbox">Robots.txt figyelembevétele</Label>
         </div>
 
         <div class="flex items-center space-x-2">
           <Checkbox id="follow_links" v-model="form.follow_links" />
-          <Label for="follow_links" class="cursor-pointer">Linkek követése</Label>
+          <Label for="follow_links" variant="checkbox">Linkek követése</Label>
         </div>
       </CardContent>
 
