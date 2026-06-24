@@ -6,8 +6,9 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Label from '@admin/components/ui/Label.vue'
+import Input from '@admin/components/ui/Input.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperUrlService } from '../../services/scraperUrlService'
@@ -120,11 +121,7 @@ onMounted(() => {
           <Input id="url" :model-value="url" readonly />
         </div>
 
-        <div class="space-y-2">
-          <Label for="type">Típus</Label>
-          <Input id="type" v-model="form.type" />
-          <InputError :message="errors.type" />
-        </div>
+        <InputField id="type" label="Típus" v-model="form.type" :errors="errors.type" />
 
         <div class="space-y-2">
           <Label for="priority">Prioritás</Label>
@@ -132,11 +129,7 @@ onMounted(() => {
           <InputError :message="errors.priority" />
         </div>
 
-        <div class="space-y-2">
-          <Label for="expiration_at">Lejárat</Label>
-          <Input id="expiration_at" v-model="form.expiration_at" type="datetime-local" />
-          <InputError :message="errors.expiration_at" />
-        </div>
+        <InputField id="expiration_at" label="Lejárat" v-model="form.expiration_at" :type="'datetime-local'" :errors="errors.expiration_at" />
       </CardContent>
 
       <CardFooter>

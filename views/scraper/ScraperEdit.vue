@@ -7,8 +7,9 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Label from '@admin/components/ui/Label.vue'
+import Input from '@admin/components/ui/Input.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperService, type ScraperFormData } from '../../services/scraperService'
@@ -93,11 +94,7 @@ onMounted(() => {
       </CardHeader>
 
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input id="name" v-model="form.name" />
-          <InputError :message="errors.name" />
-        </div>
+        <InputField id="name" label="Név" v-model="form.name" :errors="errors.name" />
 
         <div class="space-y-2">
           <Label for="base_url">Alap URL</Label>
