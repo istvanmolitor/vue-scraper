@@ -1,28 +1,19 @@
 <script setup lang="ts">
 import { AdminLayout, toastService, CreateButton, EditButton, DeleteButton, IconButton } from '@admin'
-import DataTable, { type Column, type PaginationMeta } from '@admin/components/ui/dataTable/DataTable.vue'
+import DataTable from '@admin/components/ui/dataTable/DataTable.vue'
 import Label from '@admin/components/ui/Label.vue'
 import ShowButton from '@admin/components/ui/button/ShowButton.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperService, type Scraper } from '../../services/scraperService'
-import { scraperUrlService, type ScraperUrl } from '../../services/scraperUrlService'
+import { scraperUrlService } from '../../services/scraperUrlService'
 
 const route = useRoute()
 const router = useRouter()
-const scraperUrls = ref<ScraperUrl[]>([])
+const table = ref()
 const scrapers = ref<Scraper[]>([])
 const selectedScraperId = ref<number | null>(null)
-const isLoading = ref(false)
 const downloadingId = ref<number | null>(null)
-const pagination = ref<PaginationMeta>({
-  current_page: 1,
-  last_page: 1,
-  per_page: 15,
-  total: 0,
-})
-
-const columns = ref<Column[]>([])
 
 const fetchScrapers = async () => {
   try {
@@ -33,45 +24,11 @@ const fetchScrapers = async () => {
   }
 }
 
-const fetchScraperUrls = async (params: {
-  search?: string
-  sort?: string
-  direction?: 'asc' | 'desc'
-  page?: number
-}) => {
-  try {
-    isLoading.value = true
-
-    const requestParams: {
-      search?: string
-      sort?: string
-      direction?: string
-      page?: number
-      scraper_id?: number
-    } = {
-      ...params,
-    }
-
-    if (selectedScraperId.value) {
-      requestParams.scraper_id = selectedScraperId.value
-    }
-
-    const response = await scraperUrlService.getAll(requestParams)
-    scraperUrls.value = response.data.data
-    pagination.value = response.data.meta
-    columns.value = (response.data.columns ?? []) as Column[]
-  } catch (error) {
-    console.error('Hiba a scraper URL-ek betöltésekor:', error)
-  } finally {
-    isLoading.value = false
-  }
-}
-
 const deleteScraperUrl = async (id: number) => {
   try {
     await scraperUrlService.delete(id)
     toastService.success('Scraper URL sikeresen törölve!')
-    await fetchScraperUrls({ page: pagination.value.current_page })
+    table.value?.refresh()
   } catch (error) {
     console.error('Hiba a scraper URL törlésekor:', error)
     toastService.error('Hiba történt a törlés során.')
@@ -91,7 +48,7 @@ const downloadScraperUrl = async (id: number) => {
     downloadingId.value = id
     await scraperUrlService.download(id)
     toastService.success('URL letöltése elindítva!')
-    await fetchScraperUrls({ page: pagination.value.current_page })
+    table.value?.refresh()
   } catch (error) {
     console.error('Hiba az URL letöltésekor:', error)
     toastService.error('Hiba történt a letöltés indításakor.')
@@ -110,8 +67,6 @@ const changeScraperFilter = async () => {
     path: '/admin/scraper-url',
     query,
   })
-
-  fetchScraperUrls({ page: 1, sort: 'id', direction: 'desc' })
 }
 
 const formatDate = (dateString: string | null) => {
@@ -129,7 +84,6 @@ onMounted(async () => {
   }
 
   await fetchScrapers()
-  fetchScraperUrls({ page: 1, sort: 'id', direction: 'desc' })
 })
 </script>
 
@@ -168,17 +122,12 @@ onMounted(async () => {
     </div>
 
     <DataTable
-      :columns="columns"
-      :data="scraperUrls"
-      :loading="isLoading"
-      :pagination="pagination"
-      search-placeholder="Keresés URL vagy típus alapján..."
-      default-sort="id"
-      default-direction="desc"
-      @fetch="fetchScraperUrls"
+      ref="table"
+      url="/api/admin/scraper/scraper-urls"
+      :extra-params="selectedScraperId ? { scraper_id: selectedScraperId } : {}"
     >
       <template #cell-ready="{ row }">
-        <span v-if="row.ready" class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
+        <span v-if="(row as any).ready" class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
           Kész
         </span>
         <span v-else class="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded">
@@ -187,13 +136,13 @@ onMounted(async () => {
       </template>
 
       <template #cell-url="{ row }">
-        <a :href="row.url" target="_blank" class="text-blue-600 hover:underline break-all block max-w-sm">
-          {{ row.url }}
+        <a :href="(row as any).url" target="_blank" class="text-blue-600 hover:underline break-all block max-w-sm">
+          {{ (row as any).url }}
         </a>
       </template>
 
       <template #cell-expiration_at="{ row }">
-        <span class="text-sm">{{ formatDate(row.expiration_at) }}</span>
+        <span class="text-sm">{{ formatDate((row as any).expiration_at) }}</span>
       </template>
 
       <template #cell-download="{ row }">
@@ -201,18 +150,18 @@ onMounted(async () => {
           <IconButton
             icon="Download"
             title="Letöltés"
-            :disabled="downloadingId === row.id"
-            @click="downloadScraperUrl(row.id)"
+            :disabled="downloadingId === (row as any).id"
+            @click="downloadScraperUrl((row as any).id)"
           />
           <div class="relative group">
             <IconButton icon="Info" />
             <div
-              v-if="row.meta_data && Object.keys(row.meta_data).length"
+              v-if="(row as any).meta_data && Object.keys((row as any).meta_data).length"
               class="pointer-events-none absolute left-8 top-0 z-50 hidden w-150 rounded border border-slate-200 bg-white p-3 shadow-lg group-hover:block"
             >
               <p class="mb-1 text-xs font-semibold text-slate-600">Letöltött adatok</p>
               <dl class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1">
-                <div v-for="(value, key) in row.meta_data" :key="String(key)" class="contents text-sm">
+                <div v-for="(value, key) in (row as any).meta_data" :key="String(key)" class="contents text-sm">
                   <dt class="whitespace-nowrap text-right font-bold text-slate-700">{{ key }}:</dt>
                   <dd class="break-all text-slate-800">{{ value }}</dd>
                 </div>
@@ -229,9 +178,9 @@ onMounted(async () => {
       </template>
 
       <template #row-actions="{ row }">
-        <ShowButton @click="showScraperUrl(row.id)" />
-        <EditButton @click="editScraperUrl(row.id)" />
-        <DeleteButton @confirm="deleteScraperUrl(row.id)" />
+        <ShowButton @click="showScraperUrl((row as any).id)" />
+        <EditButton @click="editScraperUrl((row as any).id)" />
+        <DeleteButton @confirm="deleteScraperUrl((row as any).id)" />
       </template>
 
       <template #empty>
