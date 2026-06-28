@@ -60,7 +60,7 @@ const handleSubmit = async () => {
 
     await scraperService.update(id, form)
     toastService.success('Scraper sikeresen frissítve!')
-    router.push('/admin/scraper')
+    router.push(`/admin/scraper-url?scraper_id=${id}`)
   } catch (error: any) {
     console.error('Hiba a scraper mentésekor:', error)
     if (error.response?.status === 422) {

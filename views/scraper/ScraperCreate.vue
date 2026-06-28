@@ -55,10 +55,7 @@ const handleSubmit = async () => {
     const createdScraperId = response?.data?.data?.id ?? response?.data?.id ?? response?.id
 
     if (createdScraperId !== undefined && createdScraperId !== null) {
-      await router.push({
-        name: 'scraper-edit',
-        params: { id: String(createdScraperId) },
-      })
+      await router.push(`/admin/scraper-url?scraper_id=${createdScraperId}`)
       return
     }
 
