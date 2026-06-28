@@ -44,6 +44,7 @@ export interface PaginatedResponse<T> {
     direction?: string
     scraper_id?: number | null
   }
+  columns?: Array<{ key: string; label: string; sortable: boolean }>
 }
 
 export interface SingleResponse<T> {

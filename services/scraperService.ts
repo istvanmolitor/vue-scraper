@@ -53,6 +53,7 @@ export interface PaginatedResponse<T> {
     sort?: string
     direction?: string
   }
+  columns?: Array<{ key: string; label: string; sortable: boolean }>
 }
 
 export interface SingleResponse<T> {

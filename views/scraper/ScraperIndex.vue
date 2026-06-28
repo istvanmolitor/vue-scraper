@@ -15,13 +15,7 @@ const pagination = ref<PaginationMeta>({
   total: 0,
 })
 
-const columns: Column<Scraper>[] = [
-  { key: 'name', label: 'Név', sortable: true },
-  { key: 'base_url', label: 'Alap URL', sortable: true },
-  { key: 'enabled', label: 'Állapot', sortable: true, width: '120px' },
-  { key: 'scraper_urls_count', label: 'URL-ek', sortable: true, width: '120px' },
-  { key: 'chunk_size', label: 'Csomagméret', sortable: true, width: '140px' },
-]
+const columns = ref<Column[]>([])
 
 const fetchScrapers = async (params: {
   search?: string
@@ -34,6 +28,7 @@ const fetchScrapers = async (params: {
     const response = await scraperService.getAll(params)
     scrapers.value = response.data.data
     pagination.value = response.data.meta
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a scraperek betöltésekor:', error)
   } finally {

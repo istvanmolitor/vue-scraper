@@ -22,14 +22,7 @@ const pagination = ref<PaginationMeta>({
   total: 0,
 })
 
-const columns: Column<ScraperUrl>[] = [
-  { key: 'download', label: '', sortable: false, width: '96px' },
-  { key: 'url', label: 'URL', sortable: false },
-  { key: 'type', label: 'Típus', sortable: true, width: '120px' },
-  { key: 'priority', label: 'Prioritás', sortable: true, width: '120px' },
-  { key: 'ready', label: 'Állapot', sortable: true, width: '120px' },
-  { key: 'expiration_at', label: 'Lejárat', sortable: true, width: '180px' },
-]
+const columns = ref<Column[]>([])
 
 const fetchScrapers = async () => {
   try {
@@ -66,6 +59,7 @@ const fetchScraperUrls = async (params: {
     const response = await scraperUrlService.getAll(requestParams)
     scraperUrls.value = response.data.data
     pagination.value = response.data.meta
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a scraper URL-ek betöltésekor:', error)
   } finally {
