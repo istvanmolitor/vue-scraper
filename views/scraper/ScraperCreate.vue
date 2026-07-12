@@ -6,9 +6,8 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
-import Checkbox from '@admin/components/ui/Checkbox.vue'
+import CheckboxField from '@admin/components/ui/CheckboxField.vue'
 import InputField from '@admin/components/ui/InputField.vue'
-import Label from '@admin/components/ui/Label.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { scraperService, type ScraperFormData } from '../../services/scraperService'
@@ -98,20 +97,11 @@ onMounted(() => {
 
         <InputField id="chunk_size" label="Csomagméret" v-model="form.chunk_size" type="number" min="1" max="100000" :errors="errors.chunk_size" />
 
-        <div class="flex items-center space-x-2">
-          <Checkbox id="enabled" v-model="form.enabled" />
-          <Label for="enabled" variant="checkbox">Engedélyezve</Label>
-        </div>
+        <CheckboxField id="enabled" label="Engedélyezve" v-model="form.enabled" />
 
-        <div class="flex items-center space-x-2">
-          <Checkbox id="robots_txt" v-model="form.robots_txt" />
-          <Label for="robots_txt" variant="checkbox">Robots.txt figyelembevétele</Label>
-        </div>
+        <CheckboxField id="robots_txt" label="Robots.txt figyelembevétele" v-model="form.robots_txt" />
 
-        <div class="flex items-center space-x-2">
-          <Checkbox id="follow_links" v-model="form.follow_links" />
-          <Label for="follow_links" variant="checkbox">Linkek követése</Label>
-        </div>
+        <CheckboxField id="follow_links" label="Linkek követése" v-model="form.follow_links" />
       </CardContent>
 
       <CardFooter>
