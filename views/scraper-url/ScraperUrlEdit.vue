@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AdminLayout, BackButton, FormButtons, InputError, LoadingSpinner, toastService } from '@admin'
+import { AdminLayout, BackButton, FormButtons, LoadingSpinner, toastService } from '@admin'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -7,8 +7,6 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import InputField from '@admin/components/ui/InputField.vue'
-import Label from '@admin/components/ui/Label.vue'
-import Input from '@admin/components/ui/Input.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperUrlService } from '../../services/scraperUrlService'
@@ -111,23 +109,13 @@ onMounted(() => {
       </CardHeader>
 
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="scraper_name">Scraper</Label>
-          <Input id="scraper_name" :model-value="scraperName" readonly />
-        </div>
+        <InputField id="scraper_name" label="Scraper" :model-value="scraperName" readonly />
 
-        <div class="space-y-2">
-          <Label for="url">URL</Label>
-          <Input id="url" :model-value="url" readonly />
-        </div>
+        <InputField id="url" label="URL" :model-value="url" readonly />
 
         <InputField id="type" label="Típus" v-model="form.type" :errors="errors.type" />
 
-        <div class="space-y-2">
-          <Label for="priority">Prioritás</Label>
-          <Input id="priority" v-model="form.priority" type="number" min="0" max="100000" />
-          <InputError :message="errors.priority" />
-        </div>
+        <InputField id="priority" label="Prioritás" v-model="form.priority" type="number" min="0" max="100000" :errors="errors.priority" />
 
         <InputField id="expiration_at" label="Lejárat" v-model="form.expiration_at" :type="'datetime-local'" :errors="errors.expiration_at" />
       </CardContent>

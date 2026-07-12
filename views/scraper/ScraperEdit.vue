@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AdminLayout, BackButton, FormButtons, InputError, LoadingSpinner, toastService } from '@admin'
+import { AdminLayout, BackButton, FormButtons, LoadingSpinner, toastService } from '@admin'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -9,7 +9,6 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import InputField from '@admin/components/ui/InputField.vue'
 import Label from '@admin/components/ui/Label.vue'
-import Input from '@admin/components/ui/Input.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperService, type ScraperFormData } from '../../services/scraperService'
@@ -96,16 +95,9 @@ onMounted(() => {
       <CardContent class="space-y-4">
         <InputField id="name" label="Név" v-model="form.name" :errors="errors.name" />
 
-        <div class="space-y-2">
-          <Label for="base_url">Alap URL</Label>
-          <Input id="base_url" :model-value="baseUrl" readonly />
-        </div>
+        <InputField id="base_url" label="Alap URL" :model-value="baseUrl" readonly />
 
-        <div class="space-y-2">
-          <Label for="chunk_size">Csomagméret</Label>
-          <Input id="chunk_size" v-model="form.chunk_size" type="number" min="1" max="100000" />
-          <InputError :message="errors.chunk_size" />
-        </div>
+        <InputField id="chunk_size" label="Csomagméret" v-model="form.chunk_size" type="number" min="1" max="100000" :errors="errors.chunk_size" />
 
         <div class="flex items-center space-x-2">
           <Checkbox id="enabled" v-model="form.enabled" />

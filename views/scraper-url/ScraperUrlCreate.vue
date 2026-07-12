@@ -8,7 +8,6 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import InputField from '@admin/components/ui/InputField.vue'
 import Label from '@admin/components/ui/Label.vue'
-import Input from '@admin/components/ui/Input.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { scraperUrlService, type ScraperSelectItem, type ScraperUrlFormData } from '../../services/scraperUrlService'
@@ -120,11 +119,7 @@ onMounted(() => {
 
         <InputField id="type" label="Típus" v-model="form.type" placeholder="page" :errors="errors.type" />
 
-        <div class="space-y-2">
-          <Label for="priority">Prioritás</Label>
-          <Input id="priority" v-model="form.priority" type="number" min="0" max="100000" />
-          <InputError :message="errors.priority" />
-        </div>
+        <InputField id="priority" label="Prioritás" v-model="form.priority" type="number" min="0" max="100000" :errors="errors.priority" />
 
         <InputField id="expiration_at" label="Lejárat" v-model="form.expiration_at" :type="'datetime-local'" :errors="errors.expiration_at" />
       </CardContent>
